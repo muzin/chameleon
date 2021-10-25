@@ -22,13 +22,15 @@ public class Chameleon {
 
     private static final String SYSTEM_TMP_DIR = System.getProperty("java.io.tmpdir");
 
+    private static final String DEFAULT_TRANSFORM_PACKAGE_PREFIX = "cn.muzin.chameleon.transform";
+
     private volatile Map<Class, Map<Class, Environment>> environments = new ConcurrentHashMap<>();
 
     private volatile EnvironmentAdaptTrainer environmentAdaptTrainer = null;
 
     private volatile String tmpdir = SYSTEM_TMP_DIR;
 
-    private volatile String packagePrefix = "";
+    private volatile String packagePrefix = DEFAULT_TRANSFORM_PACKAGE_PREFIX;
 
     public Chameleon(){
         environmentAdaptTrainer = new EnvironmentAdaptTrainer(this);

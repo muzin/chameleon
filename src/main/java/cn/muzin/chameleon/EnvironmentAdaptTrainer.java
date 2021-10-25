@@ -38,8 +38,6 @@ public class EnvironmentAdaptTrainer {
 
     private static final String ARRAYLIST_CLASS_NAME = ArrayList.class.getName();
 
-    private static final String ADD_PREFIX = "add";
-    private static final String REMOVE_PREFIX = "remove";
     private static final String GET_PREFIX = "get";
     private static final String SET_PREFIX = "set";
     private static final String IS_PREFIX = "is";
@@ -491,13 +489,14 @@ public class EnvironmentAdaptTrainer {
         String fieldName = field.getName();
         String fieldFirstUpper = VariableUtils.firstCharToUpper(fieldName);
         String readMethodName = GET_PREFIX + fieldFirstUpper;
-        if (readMethodName == null) {
+        Method readMethod = internalFindMethod(clazz, readMethodName, methods, 0, null);
+        if (readMethod == null) {
             Class<?> type = field.getType();
             if (type == boolean.class || type == null) {
                 readMethodName = IS_PREFIX + fieldFirstUpper;
+                readMethod = internalFindMethod(clazz, readMethodName, methods, 0, null);
             }
         }
-        Method readMethod = internalFindMethod(clazz, readMethodName, methods, 0, null);
         return readMethod;
     }
 
