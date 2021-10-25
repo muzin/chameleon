@@ -1,5 +1,7 @@
 package cn.muzin.chameleon;
 
+import cn.muzin.chameleon.exception.ChameleonTrainException;
+
 /**
  * EnvironmentImpl Demo
  * @Author sirius
@@ -14,6 +16,7 @@ public class EnvironmentImpl implements Environment {
     private Class destClass;
 
     public EnvironmentImpl(){
+        throw new ChameleonTrainException("EnvironmentImpl cannot be created.");
     }
 
     public Chameleon getChameleon() {
@@ -41,6 +44,9 @@ public class EnvironmentImpl implements Environment {
     }
 
     public void transform(Object sourceObj, Object destObj, boolean adaptationStructureMismatch) {
+
+        throw new ChameleonTrainException("transform cannot be invoke.");
+
         // 只处理 getter/setter 方法
         // 实现：
         // 1. 类型相同，直接转换
