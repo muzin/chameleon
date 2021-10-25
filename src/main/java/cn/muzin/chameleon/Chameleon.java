@@ -38,10 +38,10 @@ public class Chameleon {
         if(tClass == rClass){
             return;
         }
-        boolean existsKey = environments.containsKey(tClass);
-        if(!existsKey) {
+
+        if(!environments.containsKey(tClass)) {
             synchronized (environments) {
-                if(!existsKey) {
+                if(!environments.containsKey(tClass)) {
                     environments.put(tClass, new ConcurrentHashMap<>());
                 }
             }
