@@ -4,17 +4,17 @@ import cn.muzin.chameleon.exception.ChameleonTrainException;
 import cn.muzin.chameleon.util.ClassUtils;
 import cn.muzin.chameleon.util.VariableUtils;
 import com.sun.beans.TypeResolver;
-import com.sun.tools.doclint.Env;
 import javassist.*;
 import sun.reflect.generics.reflectiveObjects.ParameterizedTypeImpl;
 
-import java.beans.Introspector;
-import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @Author sirius
