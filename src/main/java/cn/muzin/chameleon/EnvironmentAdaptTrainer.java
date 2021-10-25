@@ -17,8 +17,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @Author sirius
- * @create 2021/10/22
+ * @author sirius
+ * @since 2021/10/22
  */
 public class EnvironmentAdaptTrainer {
 
@@ -58,9 +58,9 @@ public class EnvironmentAdaptTrainer {
 
     /**
      * 训练 类型转换 环境
-     * @param tClass
-     * @param rClass
-     * @return
+     * @param tClass 源Class
+     * @param rClass 目标Class
+     * @return Environment集合
      */
     public Map<Class, Environment> train(Class tClass, Class rClass){
         HashMap<Class, Environment> map = new HashMap<>();

@@ -7,8 +7,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @Author sirius
- * @create 2021/10/23
+ * @suthor sirius
+ * @since 2021/10/23
  */
 public class EnvironmentAdaptTrainerTest {
 

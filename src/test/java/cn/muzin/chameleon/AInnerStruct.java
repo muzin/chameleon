@@ -1,8 +1,8 @@
 package cn.muzin.chameleon;
 
 /**
- * @Author sirius
- * @create 2021/10/22
+ * @author sirius
+ * @since 2021/10/22
  */
 public class AInnerStruct {
 

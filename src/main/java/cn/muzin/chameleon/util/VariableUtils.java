@@ -9,8 +9,8 @@ import java.util.stream.Collectors;
  *
  * 变量名称处理工具类
  *
- * @Author sirius
- * @create 2020/9/29 15:11
+ * @author sirius
+ * @since 2020/9/29 15:11
  */
 public class VariableUtils {
 
@@ -20,6 +20,8 @@ public class VariableUtils {
 
     /**
      * 下划线转驼峰
+     * @param str 源字符串
+     * @return 转换后的值
      */
     public static String lineToHump(String str) {
         str = str.toLowerCase();
@@ -34,8 +36,8 @@ public class VariableUtils {
 
     /**
      * 拼接下划线形式的变量
-     * @param strs
-     * @return
+     * @param strs 字符串数组
+     * @return 拼接后的字符串
      */
     public static String toLine(String... strs){
         ArrayList<String> strings = new ArrayList<>();
@@ -54,6 +56,8 @@ public class VariableUtils {
      *
      * 推荐: {@link #fastHumpToLine(String)}
      *
+     * @param str 源字符串
+     * @return 结果字符串
      */
     public static String humpToLine(String str) {
         String s = str.replaceAll("[A-Z]", "_$0").toLowerCase();
@@ -62,6 +66,8 @@ public class VariableUtils {
 
     /**
      * 驼峰转下划线,效率比上面高
+     * @param str 源字符串
+     * @return 结果
      */
     public static String fastHumpToLine(String str) {
         Matcher matcher = humpPattern.matcher(str);
@@ -76,8 +82,8 @@ public class VariableUtils {
 
     /**
      * 拼接下划线形式的变量
-     * @param strs
-     * @return
+     * @param strs 源字符串
+     * @return 结果
      */
     public static String toHump(String... strs){
         ArrayList<String> strings = new ArrayList<>();
@@ -91,8 +97,8 @@ public class VariableUtils {
 
     /**
      * 首字母大写
-     * @param str
-     * @return
+     * @param str 源字符串
+     * @return 结果
      */
     public static String firstCharToUpper(String str){
         return str.substring(0, 1).toUpperCase() + str.substring(1);
@@ -100,8 +106,8 @@ public class VariableUtils {
 
     /**
      * 首字母大写
-     * @param str
-     * @return
+     * @param str 源字符串
+     * @return 结果
      */
     public static String firstCharToLower(String str){
         return str.substring(0, 1).toLowerCase() + str.substring(1);

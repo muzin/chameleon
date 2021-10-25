@@ -6,7 +6,7 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * <title>Chameleon</title>
+ * Chameleon
  *
  * <p>Chameleon 用于实现两个不同类型之间的转换。</p>
  * <p>在转换之前，需要学习训练两个模型间的相互转换。</p>
@@ -15,8 +15,8 @@ import java.util.concurrent.ConcurrentHashMap;
  * <p>通过 javassist 生成两个类型之间相互转化的字节码类，加载到JVM中，进行缓存；</p>
  * <p>在转换的时候，根据两个对象的Class，找到转化两者的动态实现类，调用生成的方法，完成转换。</p>
  *
- * @Author sirius
- * @create 2021/10/22
+ * @author sirius
+ * @since 2021/10/22
  */
 public class Chameleon {
 
@@ -66,8 +66,8 @@ public class Chameleon {
      * 如果已经存在两个类型类型的相互转换将跳过，
      * 如果类被修改过，需要调用`readapt`进行重新适应
      *
-     * @param tClass
-     * @param rClass
+     * @param tClass 源Class
+     * @param rClass 目标Class
      */
     public void adapt(Class tClass, Class rClass){
         if(existsEnvironment(tClass, rClass)){

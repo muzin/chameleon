@@ -1,8 +1,8 @@
 package cn.muzin.chameleon.exception;
 
 /**
- * @Author sirius
- * @create 2021/10/23
+ * @author sirius
+ * @since 2021/10/23
  */
 public class ChameleonTrainException extends RuntimeException {
 

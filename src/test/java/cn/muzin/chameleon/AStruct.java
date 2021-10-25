@@ -3,8 +3,8 @@ package cn.muzin.chameleon;
 import java.util.List;
 
 /**
- * @Author sirius
- * @create 2021/10/22
+ * @author sirius
+ * @since 2021/10/22
  */
 public class AStruct extends CStruct {
 

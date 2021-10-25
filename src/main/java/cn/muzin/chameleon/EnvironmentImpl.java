@@ -4,8 +4,8 @@ import cn.muzin.chameleon.exception.ChameleonTrainException;
 
 /**
  * EnvironmentImpl Demo
- * @Author sirius
- * @create 2021/10/22
+ * @author sirius
+ * @since 2021/10/22
  */
 public class EnvironmentImpl implements Environment {
 
