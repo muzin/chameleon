@@ -84,7 +84,7 @@ public class EnvironmentAdaptTrainer {
      */
     private Environment mockEnvironment(Class tClass, Class rClass){
         try {
-            Class<Environment> environmentClass = generateEnironmentImpl(tClass, rClass);
+            Class<Environment> environmentClass = generateEnvironmentImpl(tClass, rClass);
             Environment environment = environmentClass.newInstance();
             environment.setSourceClass(tClass);
             environment.setDestClass(rClass);
@@ -104,7 +104,7 @@ public class EnvironmentAdaptTrainer {
      * @throws CannotCompileException
      * @throws IOException
      */
-    private Class<Environment> generateEnironmentImpl(Class tClass, Class rClass)
+    private Class<Environment> generateEnvironmentImpl(Class tClass, Class rClass)
             throws NotFoundException, CannotCompileException, IOException, ClassNotFoundException {
         String tClassSimpleName = tClass.getSimpleName();
         String rClassSimpleName = rClass.getSimpleName();
