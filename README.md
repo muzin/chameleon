@@ -87,6 +87,13 @@ List<BStruct> bStructList = ChameleonUtil.transform(aStructList, BStruct.class);
 > 注意：配置完成后，一定要调用`ready`方法！！！
 
 ```java
+// 添加 @ChameleonTransform 注解
+@ChameleonTransform(dest = { BStruct.class, OtherStruct.class })
+public class AStruct extends CStruct {
+    // class code ...
+}
+
+
 // 配置 注解适配选择器， 扫描指定包下面的所有类（可添加多个包名）
 ChameleonUtil.addEnvironmentAdaptSelector(
         new ChameleonTransformEnvironmentAdaptSelector()
