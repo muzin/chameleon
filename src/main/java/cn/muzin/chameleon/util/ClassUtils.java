@@ -495,7 +495,7 @@ public abstract class ClassUtils {
 	/**
 	 * 加载类
 	 * @param fullClsName 类全名
-	 * @return
+	 * @return class
 	 */
 	public static Class<?> loadClass(String fullClsName) {
 		ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();
