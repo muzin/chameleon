@@ -50,6 +50,15 @@ Chameleon 是一款基于 javassist 动态字节码生成的类型转换工具�
 
 ## 使用
 
+### dependency
+```xml
+<dependency>
+   <groupId>cn.muzin</groupId>
+   <artifactId>chameleon</artifactId>
+   <version>1.0.1</version>
+</dependency>
+```
+
 ### 方式1（惰性加载）：
 不预加载转换类，在需要的时候加载转换类
 
