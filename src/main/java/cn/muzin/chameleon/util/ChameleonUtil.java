@@ -1,6 +1,7 @@
 package cn.muzin.chameleon.util;
 
 import cn.muzin.chameleon.Chameleon;
+import cn.muzin.chameleon.selector.EnvironmentAdaptSelector;
 
 import java.util.Collection;
 import java.util.List;
@@ -31,6 +32,14 @@ public class ChameleonUtil {
 
     public static String getPackagePrefix(){
         return chameleon.getPackagePrefix();
+    }
+
+    public static void addEnvironmentAdaptSelector(EnvironmentAdaptSelector selector){
+        chameleon.addEnvironmentAdaptSelector(selector);
+    }
+
+    public static void ready(){
+        chameleon.ready();
     }
 
     public static <T, R> void transform(T source, R dest){

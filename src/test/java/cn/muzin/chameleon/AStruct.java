@@ -1,11 +1,14 @@
 package cn.muzin.chameleon;
 
+import cn.muzin.chameleon.annotation.ChameleonTransform;
+
 import java.util.List;
 
 /**
  * @author sirius
  * @since 2021/10/22
  */
+@ChameleonTransform(dest = { BStruct.class })
 public class AStruct extends CStruct {
 
     private String name;

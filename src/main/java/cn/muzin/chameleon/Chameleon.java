@@ -1,9 +1,15 @@
 package cn.muzin.chameleon;
 
 import cn.muzin.chameleon.exception.ChameleonTransformException;
+import cn.muzin.chameleon.pair.StructPair;
+import cn.muzin.chameleon.pair.StructToMultiPair;
+import cn.muzin.chameleon.pair.StructToOnePair;
+import cn.muzin.chameleon.selector.EnvironmentAdaptSelector;
+import cn.muzin.chameleon.trainer.EnvironmentAdaptTrainer;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CountDownLatch;
 
 /**
  * Chameleon
@@ -31,6 +37,11 @@ public class Chameleon {
     private volatile String tmpdir = SYSTEM_TMP_DIR;
 
     private volatile String packagePrefix = DEFAULT_TRANSFORM_PACKAGE_PREFIX;
+
+    /**
+     * 记录 预加载 类转换的选择器，如果有 按照选择器的规则进行预定义转换类
+     */
+    private volatile List<EnvironmentAdaptSelector> selectors = new ArrayList<>();
 
     public Chameleon(){
         environmentAdaptTrainer = new EnvironmentAdaptTrainer(this);
@@ -123,6 +134,86 @@ public class Chameleon {
             return null;
         }
         return environmentMap.get(destClass);
+    }
+
+    /**
+     * 添加 环境适应 选择器
+     * @param selector 环境适应选择器
+     */
+    public void addEnvironmentAdaptSelector(EnvironmentAdaptSelector selector){
+        this.selectors.add(selector);
+    }
+
+    /**
+     * 添加 环境适应 选择器
+     * @return EnvironmentAdaptSelector 集合
+     */
+    public List<EnvironmentAdaptSelector> getEnvironmentAdaptSelectors(){
+        return this.selectors;
+    }
+
+    /**
+     * 配置了 环境适应 选择器 等信息后，
+     * 需要调用 ready 方法进行加载。
+     */
+    public void ready(){
+        readyEnvironmentAdaptSelectors();
+    }
+
+    private void readyEnvironmentAdaptSelectors(){
+        List<EnvironmentAdaptSelector> environmentAdaptSelectors = this.getEnvironmentAdaptSelectors();
+        if(environmentAdaptSelectors != null && environmentAdaptSelectors.size() > 0){
+            Map<Class, StructToMultiPair> structToMultiPairMap = new HashMap<>();
+            for(EnvironmentAdaptSelector environmentAdaptSelector : environmentAdaptSelectors){
+                List<StructPair> structPairs = environmentAdaptSelector.selector();
+                for(StructPair structPair : structPairs){
+                    Class mainStruct = structPair.getMainStruct();
+                    StructToMultiPair tmpPair = null;
+                    if(!structToMultiPairMap.containsKey(mainStruct)){
+                        tmpPair = new StructToMultiPair(mainStruct);
+                        structToMultiPairMap.put(mainStruct, tmpPair);
+                    }else{
+                        tmpPair = structToMultiPairMap.get(mainStruct);
+                    }
+
+                    if(structPairs instanceof StructToOnePair){
+                        StructToOnePair tmpStructToOnePair = (StructToOnePair) structPair;
+                        Class tmpStruct = tmpStructToOnePair.getStruct();
+                        if(tmpStruct != null) {
+                            tmpPair.addStruct(tmpStruct);
+                        }
+                    }else if(structPair instanceof StructToMultiPair){
+                        StructToMultiPair tmpStructToMultiPair = (StructToMultiPair) structPair;
+                        Set<Class> tmpStructSet = tmpStructToMultiPair.getStructSet();
+                        if(tmpStructSet != null) {
+                            tmpPair.addStructs(tmpStructSet);
+                        }
+                    }
+                }
+            }
+
+            Collection<StructToMultiPair> structToMultiPairs = structToMultiPairMap.values();
+
+            CountDownLatch countDownLatch = new CountDownLatch(structToMultiPairs.size());
+            structToMultiPairs.parallelStream().forEach(structToMultiPair->{
+                Class mainStruct = structToMultiPair.getMainStruct();
+                Set<Class> structSet = structToMultiPair.getStructSet();
+
+                for(Class structClass : structSet){
+                    this.adapt(mainStruct, structClass);
+                }
+
+                countDownLatch.countDown();
+
+            });
+
+            try {
+                countDownLatch.await();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+        }
     }
 
     public <T, R> void transform(T source, R dest){

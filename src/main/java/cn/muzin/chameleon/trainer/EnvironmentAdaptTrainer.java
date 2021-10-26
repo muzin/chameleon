@@ -1,5 +1,7 @@
-package cn.muzin.chameleon;
+package cn.muzin.chameleon.trainer;
 
+import cn.muzin.chameleon.Chameleon;
+import cn.muzin.chameleon.Environment;
 import cn.muzin.chameleon.exception.ChameleonTrainException;
 import cn.muzin.chameleon.util.ClassUtils;
 import cn.muzin.chameleon.util.VariableUtils;
