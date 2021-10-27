@@ -1,6 +1,6 @@
 # Chameleon
 
-Chameleon 是一款基于 javassist 动态字节码生成的类型转换工具。
+Chameleon 是一款基于 javassist 动态字节码生成的高性能类型转换工具。
 
 ## 解决痛点：
 1. Spring 的 BeanUtils 类型转换效率相对不太理想。

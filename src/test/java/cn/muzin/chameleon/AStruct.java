@@ -94,15 +94,6 @@ public class AStruct extends CStruct {
         this.photo = photo;
     }
 
-//    public List<String> getSignList() {
-//        return signList;
-//    }
-//
-//    public void setSignList(List<String> signList) {
-//        this.signList = signList;
-//    }
-
-
     public AInnerStruct getInner() {
         return inner;
     }

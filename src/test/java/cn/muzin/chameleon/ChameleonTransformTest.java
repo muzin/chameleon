@@ -17,8 +17,10 @@ public class ChameleonTransformTest {
         long st = 0;
         long et = 0;
 
+        // 设置 class 文件存储位置，不设置时，默认在临时目录下，便于debug时，查看class的情况。
         ChameleonUtil.setTmpDir("/Users/sirius/bucket/project/IdeaProjects/chameleon/target/dclass");
 
+        // 配置 注解适配选择器
         ChameleonUtil.addEnvironmentAdaptSelector(
                 new ChameleonTransformEnvironmentAdaptSelector()
                         .addBasePackage("cn.muzin.chameleon")
@@ -26,17 +28,11 @@ public class ChameleonTransformTest {
 
         st = System.currentTimeMillis();
 
+        // 开始根据注解 预加载 转换类
         ChameleonUtil.ready();
 
         et = System.currentTimeMillis();
         System.out.println((et - st) + " ms ready");
-
-
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
 
 
         AStruct aStruct = new AStruct();
@@ -53,34 +49,28 @@ public class ChameleonTransformTest {
         aStruct.setInner(aInnerStruct);
         aStruct.setTtt(123);
 
-//        List<Long> longs = new ArrayList<Long>();
-//        longs.add(123L);
-//        longs.add(127L);
-//        longs.add(125L);
-//
-//        aStruct.setSignList(longs);
-//        aStruct.setStrList(longs);
-//
-//        ArrayList<AInnerStruct> aInnerStructs = new ArrayList<>();
-//        aInnerStructs.add(aInnerStruct);
-//        aInnerStructs.add(aInnerStruct);
-//        aStruct.setInnerList(aInnerStructs);
+        List<Long> longs = new ArrayList<Long>();
+        longs.add(123L);
+        longs.add(127L);
+        longs.add(125L);
 
+        aStruct.setSignList(longs);
+        aStruct.setStrList(longs);
+
+        ArrayList<AInnerStruct> aInnerStructs = new ArrayList<>();
+        aInnerStructs.add(aInnerStruct);
+        aInnerStructs.add(aInnerStruct);
+        aStruct.setInnerList(aInnerStructs);
 
         for(int o = 0; o < 10; o++) {
             st = System.currentTimeMillis();
             for (int i = 0; i < 10000000; i++) {
-
                 BStruct bStruct = ChameleonUtil.transform(aStruct, BStruct.class, true);
-//            System.out.println(bStruct);
-
             }
             et = System.currentTimeMillis();
-            System.out.println((et - st) + " ms test");
+            System.out.println((et - st) + " ms transform");
         }
 
-
     }
-
 
 }
