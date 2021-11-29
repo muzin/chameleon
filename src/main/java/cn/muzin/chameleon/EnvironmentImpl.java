@@ -44,6 +44,11 @@ public class EnvironmentImpl implements Environment {
     }
 
     public void transform(Object sourceObj, Object destObj, boolean adaptationStructureMismatch) {
+        transform(sourceObj, destObj, adaptationStructureMismatch, false);
+    }
+
+    @Override
+    public void transform(Object source, Object dest, boolean adaptationStructureMismatch, boolean skipNull) {
 
         throw new ChameleonTrainException("transform cannot be invoke.");
 

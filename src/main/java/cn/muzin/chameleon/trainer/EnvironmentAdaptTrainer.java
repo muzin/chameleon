@@ -165,11 +165,29 @@ public class EnvironmentAdaptTrainer {
                     cc);
         transformCtMethod.setModifiers(Modifier.PUBLIC);
 
-        String transformMethodBody = generateTransformMethodBody(tClass, rClass, transformCtMethod);
+        String transformMethodBody = generateTransformMethodBody();
         transformCtMethod.setBody(transformMethodBody);
 
         cc.addMethod(transformCtMethod);
 
+        String transform2CtMethodName = "transform";
+        CtClass[] transform2CtMethodParams = new CtClass[]{
+                pool.get(OBJECT_NAME),
+                pool.get(OBJECT_NAME),
+                CtClass.booleanType,
+                CtClass.booleanType,
+        };
+
+        CtMethod transform2CtMethod = new CtMethod(CtClass.voidType,
+                transform2CtMethodName,
+                transform2CtMethodParams,
+                cc);
+        transform2CtMethod.setModifiers(Modifier.PUBLIC);
+
+        String transform2MethodBody = generateTransform2MethodBody(tClass, rClass, transform2CtMethod);
+        transform2CtMethod.setBody(transform2MethodBody);
+
+        cc.addMethod(transform2CtMethod);
 
         // 这里会将这个创建的类对象编译为.class文件
         String tmpDir = getTmpDir();
@@ -198,13 +216,31 @@ public class EnvironmentAdaptTrainer {
         return environmentClass;
     }
 
+    private String generateTransform2MethodBody(Class sourceClass, Class destClass, CtMethod ctMethod) {
+
+        String str = "";
+        str += "if($4){";
+        str += generateTransform2MethodCodes(sourceClass, destClass, ctMethod, true);
+        str += "}else{";
+        str += generateTransform2MethodCodes(sourceClass, destClass, ctMethod);
+        str += "}";
+
+        return "{\n" + str + "\n}";
+    }
+
+    private String generateTransform2MethodCodes(Class sourceClass, Class destClass, CtMethod ctMethod) {
+        return generateTransform2MethodCodes(sourceClass, destClass, ctMethod, false);
+    }
+
     /**
      * 生成 transform 方法体
      * @param sourceClass
      * @param destClass
+     * @param ctMethod
+     * @param genCheckSkipNull 生成 检查是否需要跳过空值的代码
      * @return
      */
-    private String generateTransformMethodBody(Class sourceClass, Class destClass, CtMethod ctMethod) throws NotFoundException, CannotCompileException {
+    private String generateTransform2MethodCodes(Class sourceClass, Class destClass, CtMethod ctMethod, boolean genCheckSkipNull) {
 
         String sourceClassSimpleName = sourceClass.getSimpleName();
         String destClassSimpleName = destClass.getSimpleName();
@@ -267,7 +303,8 @@ public class EnvironmentAdaptTrainer {
                             // Simple Field Convert
                             simpleAssignValueConvertForTransformMethodBody(stringBuilder,
                                     destVariableName, writeMethodName,
-                                    sourceVariableName, readMethodName);
+                                    sourceVariableName, readMethodName,
+                                    genCheckSkipNull);
                         }else{
                             // 两个泛型类型不同
 
@@ -278,6 +315,13 @@ public class EnvironmentAdaptTrainer {
                             if(writeMethodGenericParameterTypeName.startsWith("java.lang.")){
                                 // 如果 目标泛型类型 为 String， 原目标进行 toString
                                 if(writeMethodGenericParameterType == String.class){
+
+                                    // 检查 是否 是空值 start
+                                    if(genCheckSkipNull) {
+                                        stringBuilder.append("if(" + sourceVariableName + "." + readMethodName + "() != null){");
+                                    }
+                                    // 检查 是否 是空值 end
+
                                     // collection toString Field Convert
                                     //
                                     //
@@ -305,11 +349,23 @@ public class EnvironmentAdaptTrainer {
                                     stringBuilder.append("\t" + destVariableName + "." + writeMethodName
                                             + "(new" + destVariableName + destClassFieldName + "Collection);\n");
                                     stringBuilder.append("}\n");
+
+                                    // 检查 是否 是空值 start
+                                    if(genCheckSkipNull) {
+                                        stringBuilder.append("}");
+                                    }
+                                    // 检查 是否 是空值 end
                                 }else {
                                     // 如果 目标泛型类型 为 其他 java.lang 包下面的类， 跳过
                                     continue;
                                 }
                             }else{
+
+                                // 检查 是否 是空值 start
+                                if(genCheckSkipNull) {
+                                    stringBuilder.append("if(" + sourceVariableName + "." + readMethodName + "() != null){");
+                                }
+                                // 检查 是否 是空值 end
 
                                 //
                                 // Examples:
@@ -322,7 +378,6 @@ public class EnvironmentAdaptTrainer {
                                 //              );
                                 //      dest.setWriteField(newWriteField);
                                 // }
-
                                 stringBuilder.append(LIST_CLASS_NAME + " "
                                         + sourceVariableName + sourceClassFieldName + "Collection = "
                                         + sourceVariableName + "." + readMethodName + "();\n");
@@ -338,6 +393,12 @@ public class EnvironmentAdaptTrainer {
                                         + "(new" + destVariableName + destClassFieldName + "Collection);\n");
                                 stringBuilder.append("}\n");
 
+                                // 检查 是否 是空值 start
+                                if(genCheckSkipNull) {
+                                    stringBuilder.append("}");
+                                }
+                                // 检查 是否 是空值 end
+
                             }
 
                         }
@@ -346,7 +407,8 @@ public class EnvironmentAdaptTrainer {
                         // Simple Field Convert
                         simpleAssignValueConvertForTransformMethodBody(stringBuilder,
                                 destVariableName, writeMethodName,
-                                sourceVariableName, readMethodName);
+                                sourceVariableName, readMethodName,
+                                genCheckSkipNull);
                     }
 
                 }else{
@@ -371,6 +433,13 @@ public class EnvironmentAdaptTrainer {
                     }
 
                     if(!writeMethodParameterTypeName.startsWith("java.lang.")) {
+
+                        // 检查 是否 是空值 start
+                        if(genCheckSkipNull) {
+                            stringBuilder.append("if(" + sourceVariableName + "." + readMethodName + "() != null){");
+                        }
+                        // 检查 是否 是空值 end
+
                         // Examples:
                         // Type readField = source.getReadField();
                         // if(readField != null && adaptationStructureMismatch) {
@@ -392,6 +461,12 @@ public class EnvironmentAdaptTrainer {
                         stringBuilder.append("\t" + destVariableName + "." + writeMethodName
                                 + "(new" + destVariableName + destClassFieldName + ");\n");
                         stringBuilder.append("}\n");
+
+                        // 检查 是否 是空值 start
+                        if(genCheckSkipNull) {
+                            stringBuilder.append("}");
+                        }
+                        // 检查 是否 是空值 end
                     }
                 }
 
@@ -401,6 +476,10 @@ public class EnvironmentAdaptTrainer {
         String str = stringBuilder.toString();
 
         return "{\n" + str + "\n}";
+    }
+
+    private String generateTransformMethodBody() {
+        return "$0.transform($1, $2, $3, " + Chameleon.DEFAULT_SKIP_NULL + ");\n";
     }
 
     /**
@@ -415,9 +494,30 @@ public class EnvironmentAdaptTrainer {
                                                           String destMethodName,
                                                           String sourceVariableName,
                                                           String sourceMethodName){
+        simpleAssignValueConvertForTransformMethodBody(stringBuilder,
+                destVariableName,
+                destMethodName,
+                sourceVariableName,
+                sourceMethodName,
+                false);
+    }
+    private void simpleAssignValueConvertForTransformMethodBody(StringBuilder stringBuilder,
+                                                                String destVariableName,
+                                                                String destMethodName,
+                                                                String sourceVariableName,
+                                                                String sourceMethodName,
+                                                                boolean genCheckSkipNull){
         // Examples: dest.setWriteField(source.getReadField());
+        if(genCheckSkipNull) {
+            stringBuilder.append("if(" + sourceVariableName + "." + sourceMethodName + "() != null){");
+        }
+
         stringBuilder.append(destVariableName + "." + destMethodName + "("
                 + sourceVariableName + "." + sourceMethodName + "());\n");
+
+        if(genCheckSkipNull){
+            stringBuilder.append("}");
+        }
     }
 
     /**
@@ -432,6 +532,7 @@ public class EnvironmentAdaptTrainer {
                                                                   String destMethodName,
                                                                   String sourceVariableName,
                                                                   String sourceMethodName){
+
         // Examples: dest.setWriteField(source.getReadField() != null ? source.getReadField().toString() : null);
         stringBuilder.append(destVariableName + "." + destMethodName + "("
                 + sourceVariableName + "." + sourceMethodName + "() != null ? "

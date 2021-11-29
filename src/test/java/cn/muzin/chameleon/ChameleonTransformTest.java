@@ -62,9 +62,9 @@ public class ChameleonTransformTest {
         aInnerStructs.add(aInnerStruct);
         aStruct.setInnerList(aInnerStructs);
 
-        for(int o = 0; o < 10; o++) {
+        for(int o = 0; o < 1; o++) {
             st = System.currentTimeMillis();
-            for (int i = 0; i < 10000000; i++) {
+            for (int i = 0; i < 1; i++) {
                 BStruct bStruct = ChameleonUtil.transform(aStruct, BStruct.class, true);
             }
             et = System.currentTimeMillis();

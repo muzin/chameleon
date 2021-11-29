@@ -43,27 +43,39 @@ public class ChameleonUtil {
     }
 
     public static <T, R> void transform(T source, R dest){
-        chameleon.transform(source, dest);
+        transform(source, dest);
     }
 
-    public static <T, R> void transform(T source, R dest, Boolean adaptationStructureMismatch){
-        chameleon.transform(source, dest, adaptationStructureMismatch);
+    public static <T, R> void transform(T source, R dest, boolean adaptationStructureMismatch){
+        transform(source, dest, adaptationStructureMismatch, false);
+    }
+
+    public static <T, R> void transform(T source, R dest, boolean adaptationStructureMismatch, boolean skipNull){
+        chameleon.transform(source, dest, adaptationStructureMismatch, skipNull);
     }
 
     public static <T, R> R transform(T source, Class<R> destClass){
-        return chameleon.transform(source, destClass, false);
+        return transform(source, destClass, false);
     }
 
-    public static <T, R> R transform(T source, Class<R> destClass, Boolean adaptationStructureMismatch){
-        return chameleon.transform(source, destClass, adaptationStructureMismatch);
+    public static <T, R> R transform(T source, Class<R> destClass, boolean adaptationStructureMismatch){
+         return transform(source, destClass, adaptationStructureMismatch, false);
+    }
+
+    public static <T, R> R transform(T source, Class<R> destClass, boolean adaptationStructureMismatch, boolean skipNull){
+        return chameleon.transform(source, destClass, adaptationStructureMismatch, skipNull);
     }
 
     public static <T, R> List<R> transform(Collection<T> source, Class<R> destClass){
-        return chameleon.transform(source, destClass, false);
+        return transform(source, destClass, false);
     }
 
-    public static <T, R> List<R> transform(Collection<T> source, Class<R> destClass, Boolean adaptationStructureMismatch){
-        return chameleon.transform(source, destClass, adaptationStructureMismatch);
+    public static <T, R> List<R> transform(Collection<T> source, Class<R> destClass, boolean adaptationStructureMismatch){
+        return transform(source, destClass, adaptationStructureMismatch, false);
+    }
+
+    public static <T, R> List<R> transform(Collection<T> source, Class<R> destClass, boolean adaptationStructureMismatch, boolean skipNull){
+        return chameleon.transform(source, destClass, adaptationStructureMismatch, skipNull);
     }
 
 }

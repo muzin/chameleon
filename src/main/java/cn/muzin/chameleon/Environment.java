@@ -20,6 +20,10 @@ public interface Environment {
 
     void setDestClass(Class sourceClass);
 
+    default void transform(Object source, Object dest, boolean adaptationStructureMismatch){
+        transform(source, dest, adaptationStructureMismatch, false);
+    }
+
     /**
      * 不同类型转换函数
      *
@@ -58,6 +62,6 @@ public interface Environment {
      * @param dest 目标类型对象
      * @param adaptationStructureMismatch 适配结构不匹配的情况
      */
-    void transform(Object source, Object dest, boolean adaptationStructureMismatch);
+    void transform(Object source, Object dest, boolean adaptationStructureMismatch, boolean skipNull);
 
 }

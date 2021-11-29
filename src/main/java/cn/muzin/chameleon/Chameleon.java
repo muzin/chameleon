@@ -39,6 +39,16 @@ public class Chameleon {
     private volatile String packagePrefix = DEFAULT_TRANSFORM_PACKAGE_PREFIX;
 
     /**
+     * 默认 不进行 结构不匹配的适配
+     */
+    public static final boolean DEFAULT_ADAPTATION_STRUCTURE_MISMATCH = false;
+
+    /**
+     * 默认不跳过空值
+     */
+    public static final boolean DEFAULT_SKIP_NULL = false;
+
+    /**
      * 记录 预加载 类转换的选择器，如果有 按照选择器的规则进行预定义转换类
      */
     private volatile List<EnvironmentAdaptSelector> selectors = new ArrayList<>();
@@ -217,10 +227,15 @@ public class Chameleon {
     }
 
     public <T, R> void transform(T source, R dest){
-        transform(source, dest, false);
+        transform(source, dest, DEFAULT_ADAPTATION_STRUCTURE_MISMATCH);
     }
 
     public <T, R> void transform(T source, R dest, boolean adaptationStructureMismatch){
+        transform(source, dest, adaptationStructureMismatch, DEFAULT_SKIP_NULL);
+    }
+
+
+    public <T, R> void transform(T source, R dest, boolean adaptationStructureMismatch, boolean skipNull){
         if(source == null || dest == null){ return; }
 
         Class<?> sourceClass = source.getClass();
@@ -236,15 +251,18 @@ public class Chameleon {
             throw new ChameleonTransformException("Environment of structure conversion not found");
         }
 
-        environment.transform(source, dest, adaptationStructureMismatch);
+        environment.transform(source, dest, adaptationStructureMismatch, skipNull);
     }
 
-
     public <T, R> List<R> transform(Collection<T> source, Class<R> destClass){
-        return transform(source, destClass, false);
+        return transform(source, destClass, DEFAULT_ADAPTATION_STRUCTURE_MISMATCH);
     }
 
     public <T, R> List<R> transform(Collection<T> source, Class<R> destClass, boolean adaptationStructureMismatch){
+        return transform(source, destClass, adaptationStructureMismatch, DEFAULT_SKIP_NULL);
+    }
+
+    public <T, R> List<R> transform(Collection<T> source, Class<R> destClass, boolean adaptationStructureMismatch, boolean skipNull){
         ArrayList<R> list = new ArrayList<>();
 
         if(source == null
@@ -279,7 +297,7 @@ public class Chameleon {
                 e.printStackTrace();
                 break;
             }
-            environment.transform(item, destInstance, adaptationStructureMismatch);
+            environment.transform(item, destInstance, adaptationStructureMismatch, skipNull);
             list.add(destInstance);
         }
         return list;
@@ -287,13 +305,17 @@ public class Chameleon {
 
 
     public <T, R> R transform(T source, Class<R> destClass){
-        return transform(source, destClass, false);
+        return transform(source, destClass, DEFAULT_ADAPTATION_STRUCTURE_MISMATCH);
     }
 
     public <T, R> R transform(T source, Class<R> destClass, boolean adaptationStructureMismatch){
+        return transform(source, destClass, adaptationStructureMismatch, DEFAULT_SKIP_NULL);
+    }
+
+    public <T, R> R transform(T source, Class<R> destClass, boolean adaptationStructureMismatch, boolean skipNull){
         try {
             R destInstance = destClass.newInstance();
-            transform(source, destInstance, adaptationStructureMismatch);
+            transform(source, destInstance, adaptationStructureMismatch, skipNull);
             return destInstance;
         } catch (InstantiationException e) {
             e.printStackTrace();
@@ -302,5 +324,4 @@ public class Chameleon {
         }
         return null;
     }
-
 }
