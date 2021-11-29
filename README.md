@@ -55,7 +55,7 @@ Chameleon 是一款基于 javassist 动态字节码生成的高性能类型转�
 <dependency>
    <groupId>cn.muzin</groupId>
    <artifactId>chameleon</artifactId>
-   <version>1.0.1</version>
+   <version>1.0.2</version>
 </dependency>
 ```
 

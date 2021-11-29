@@ -61,6 +61,7 @@ public interface Environment {
      * @param source 源类型对象
      * @param dest 目标类型对象
      * @param adaptationStructureMismatch 适配结构不匹配的情况
+     * @param skipNull 跳过空值
      */
     void transform(Object source, Object dest, boolean adaptationStructureMismatch, boolean skipNull);
 
