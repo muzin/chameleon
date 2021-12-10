@@ -1,7 +1,9 @@
 package cn.muzin.chameleon;
 
 import cn.muzin.chameleon.annotation.ChameleonTransform;
+import org.junit.Before;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -29,6 +31,8 @@ public class AStruct extends CStruct {
     private List<Long> signList;
 
     private List<Long> strList;
+
+    private BigDecimal decimal;
 
     public String getName() {
         return name;
@@ -132,5 +136,15 @@ public class AStruct extends CStruct {
 
     public void setInnerList(List<AInnerStruct> innerList) {
         this.innerList = innerList;
+    }
+
+
+
+    public BigDecimal getDecimal() {
+        return decimal;
+    }
+
+    public void setDecimal(BigDecimal decimal) {
+        this.decimal = decimal;
     }
 }

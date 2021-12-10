@@ -3,8 +3,12 @@ package cn.muzin.chameleon;
 import cn.muzin.chameleon.selector.ChameleonTransformEnvironmentAdaptSelector;
 import cn.muzin.chameleon.util.ChameleonUtil;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * @author sirius
@@ -62,10 +66,19 @@ public class ChameleonTransformTest {
         aInnerStructs.add(aInnerStruct);
         aStruct.setInnerList(aInnerStructs);
 
+        aStruct.setDecimal(new BigDecimal("3.1415926579"));
+
+        BStruct bStruct1 = ChameleonUtil.transform(aStruct, BStruct.class, true);
+
+        Map mapStruct = ChameleonUtil.transform(aStruct, Map.class, true);
+
+        AStruct a2Struct = ChameleonUtil.transform(mapStruct, AStruct.class, true);
+
         for(int o = 0; o < 1; o++) {
             st = System.currentTimeMillis();
             for (int i = 0; i < 1; i++) {
                 BStruct bStruct = ChameleonUtil.transform(aStruct, BStruct.class, true);
+                System.out.println(bStruct);
             }
             et = System.currentTimeMillis();
             System.out.println((et - st) + " ms transform");

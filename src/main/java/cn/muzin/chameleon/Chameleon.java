@@ -6,10 +6,12 @@ import cn.muzin.chameleon.pair.StructToMultiPair;
 import cn.muzin.chameleon.pair.StructToOnePair;
 import cn.muzin.chameleon.selector.EnvironmentAdaptSelector;
 import cn.muzin.chameleon.trainer.EnvironmentAdaptTrainer;
+import cn.muzin.chameleon.trainer.code.ClassReaderUtil;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CountDownLatch;
+import java.util.stream.Collectors;
 
 /**
  * Chameleon
@@ -274,6 +276,10 @@ public class Chameleon {
         Iterator<T> tmpIterator = source.iterator();
         T first = tmpIterator.next();
 
+        if(first.getClass() == destClass){
+            return (List<R>) source.stream().collect(Collectors.toList());
+        }
+
         Class<?> sourceGenericClass = first.getClass();
 
         Boolean exists = existsEnvironment(sourceGenericClass, destClass);
@@ -286,10 +292,19 @@ public class Chameleon {
             throw new ChameleonTransformException("Environment of structure conversion not found");
         }
 
+        boolean destClassIsMap = false;
+        if(destClass.isAssignableFrom(Map.class) || ClassReaderUtil.isExtends(destClass, Map.class)){
+            destClassIsMap = true;
+        }
+
         for(T item : source) {
             R destInstance = null;
             try {
-                destInstance = destClass.newInstance();
+                if(destClassIsMap){
+                    destInstance = (R) new LinkedHashMap();
+                }else{
+                    destInstance = destClass.newInstance();
+                }
             } catch (InstantiationException e) {
                 e.printStackTrace();
                 break;
@@ -313,8 +328,25 @@ public class Chameleon {
     }
 
     public <T, R> R transform(T source, Class<R> destClass, boolean adaptationStructureMismatch, boolean skipNull){
+
+        if(source.getClass() == destClass){
+            return (R) source;
+        }
+
+        boolean destClassIsMap = false;
+        if(destClass.isAssignableFrom(Map.class) || ClassReaderUtil.isExtends(destClass, Map.class)){
+            destClassIsMap = true;
+        }
+
         try {
-            R destInstance = destClass.newInstance();
+            R destInstance = null;
+
+            if(destClassIsMap){
+                destInstance = (R) new LinkedHashMap();
+            }else{
+                destInstance = destClass.newInstance();
+            }
+
             transform(source, destInstance, adaptationStructureMismatch, skipNull);
             return destInstance;
         } catch (InstantiationException e) {
