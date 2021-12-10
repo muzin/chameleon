@@ -1,7 +1,6 @@
-package cn.muzin.chameleon;
+package cn.muzin.chameleon.entity;
 
 import cn.muzin.chameleon.annotation.ChameleonTransform;
-import org.junit.Before;
 
 import java.math.BigDecimal;
 import java.util.List;

@@ -1,4 +1,4 @@
-package cn.muzin.chameleon;
+package cn.muzin.chameleon.entity;
 
 /**
  * @author sirius

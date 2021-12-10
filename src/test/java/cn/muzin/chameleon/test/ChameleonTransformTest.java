@@ -1,5 +1,8 @@
-package cn.muzin.chameleon;
+package cn.muzin.chameleon.test;
 
+import cn.muzin.chameleon.entity.AInnerStruct;
+import cn.muzin.chameleon.entity.AStruct;
+import cn.muzin.chameleon.entity.BStruct;
 import cn.muzin.chameleon.selector.ChameleonTransformEnvironmentAdaptSelector;
 import cn.muzin.chameleon.util.ChameleonUtil;
 
@@ -7,8 +10,6 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * @author sirius
@@ -22,7 +23,7 @@ public class ChameleonTransformTest {
         long et = 0;
 
         // 设置 class 文件存储位置，不设置时，默认在临时目录下，便于debug时，查看class的情况。
-        ChameleonUtil.setTmpDir("/Users/sirius/bucket/project/IdeaProjects/chameleon/target/dclass");
+//        ChameleonUtil.setTmpDir("/Users/sirius/bucket/project/IdeaProjects/chameleon/target/dclass");
 
         // 配置 注解适配选择器
         ChameleonUtil.addEnvironmentAdaptSelector(
@@ -74,15 +75,12 @@ public class ChameleonTransformTest {
 
         AStruct a2Struct = ChameleonUtil.transform(mapStruct, AStruct.class, true);
 
-        for(int o = 0; o < 1; o++) {
-            st = System.currentTimeMillis();
-            for (int i = 0; i < 1; i++) {
-                BStruct bStruct = ChameleonUtil.transform(aStruct, BStruct.class, true);
-                System.out.println(bStruct);
-            }
-            et = System.currentTimeMillis();
-            System.out.println((et - st) + " ms transform");
-        }
+        st = System.currentTimeMillis();
+        BStruct bStruct = ChameleonUtil.transform(aStruct, BStruct.class, true);
+        System.out.println(bStruct);
+
+        et = System.currentTimeMillis();
+        System.out.println((et - st) + " ms transform");
 
     }
 

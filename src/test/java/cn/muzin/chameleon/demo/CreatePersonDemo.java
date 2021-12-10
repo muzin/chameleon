@@ -1,4 +1,4 @@
-package cn.muzin.chameleon;
+package cn.muzin.chameleon.demo;
 
 
 import javassist.*;
@@ -12,7 +12,7 @@ import java.util.List;
  * @date 2019-08-06
  * @Desc
  */
-public class CreatePerson {
+public class CreatePersonDemo {
 
     /**
      * 创建一个Person 对象

@@ -1,4 +1,4 @@
-package cn.muzin.chameleon;
+package cn.muzin.chameleon.entity;
 
 import java.math.BigDecimal;
 import java.util.List;

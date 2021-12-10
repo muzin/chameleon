@@ -57,6 +57,8 @@ public class Chameleon {
 
     public Chameleon(){
         environmentAdaptTrainer = new EnvironmentAdaptTrainer(this);
+        environmentAdaptTrainer.setTmpDir(getTmpdir());
+        environmentAdaptTrainer.setPackagePrefix(getPackagePrefix());
     }
 
     public void readapt(Class tClass, Class rClass){
@@ -132,7 +134,7 @@ public class Chameleon {
     }
 
     public String getPackagePrefix() {
-        return packagePrefix;
+        return this.packagePrefix;
     }
 
     public void setPackagePrefix(String packagePrefix) {
