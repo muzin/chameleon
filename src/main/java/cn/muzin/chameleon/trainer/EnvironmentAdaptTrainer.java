@@ -30,7 +30,7 @@ public class EnvironmentAdaptTrainer {
     public EnvironmentAdaptTrainer(Chameleon chameleon){
         this.chameleon = chameleon;
         this.packagePrefix = chameleon.getPackagePrefix();
-        this.tmpDir = chameleon.getTmpdir();
+        this.setTmpDir(chameleon.getTmpdir());
     }
 
     /**
